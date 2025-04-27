@@ -24,19 +24,19 @@ async function migrateContract() {
     addresses: [myAddress],
   });
 
-  var uploaded = await signingClient.upload(myAddress, wasmByteCode, "auto", "", instantiatePermission);
+  const fee = {
+    amount: [coin(300000, "untrn")],
+    gas: "30000000",
+  };
+
+  var uploaded = await signingClient.upload(myAddress, wasmByteCode, fee, "", instantiatePermission);
   var codeID = uploaded.codeId;
   console.log("Upload successful. New code ID:", uploaded.codeId);
 
   console.log("Instantiating...");
   var instantiateMsg = {};
 
-  const fee = {
-    amount: [coin(300000, "untrn")],
-    gas: "30000000",
-  };
-
-  var instantiated = await signingClient.instantiate(myAddress, codeID, instantiateMsg, "DCA", fee, {
+  var instantiated = await signingClient.instantiate(myAddress, codeID, instantiateMsg, "Contract Instantiated", fee, {
     admin: myAddress,
   });
 
